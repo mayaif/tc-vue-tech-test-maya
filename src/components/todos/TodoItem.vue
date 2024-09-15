@@ -22,10 +22,22 @@ const emit = defineEmits<{
 
 const editedTitle = ref('')
 
+const getStatus = (todo: Todo): 'not_started' | 'in_progress' | 'completed' => {
+    if (todo.completed) return 'completed'
+    if (todo.inProgress) return 'in_progress'
+    return 'not_started'
+}
+
 const getStatusColor = (todo: Todo) => {
-    if (todo.completed) return 'bg-green-500'
-    if (todo.inProgress) return 'bg-yellow-500'
-    return 'bg-gray-500'
+    const status = getStatus(todo)
+    switch (status) {
+        case 'completed':
+            return 'bg-green-500'
+        case 'in_progress':
+            return 'bg-yellow-500'
+        case 'not_started':
+            return 'bg-gray-500'
+    }
 }
 </script>
 
