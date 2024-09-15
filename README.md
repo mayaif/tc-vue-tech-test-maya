@@ -3,5 +3,7 @@ Simple Vue.js 3 to-do list app with task management features: add, edit, mark as
 
 This todo list app uses Pinia for state management to centralize and streamline handling of todos. The store manages the state, including fetching todos from an API ([JSON place holder](https://jsonplaceholder.typicode.com/guide/) `/users/1/todos`), performing CRUD operations and persisting data to localStorage. Esures reactive data across components, making state management more efficient and the app easier to maintain.
 
+The app is fully responsive across devices and meets WCAG 2.2 AA accessibility standards, including support for 400% content reflow, text resizing up 200%, text spacing, sufficient color contrast, keyboard navigation and additional accessibility features.
+
 - [Package - shadcn](https://www.shadcn-vue.com/)
 - [CSS - tailwindcss](https://tailwindcss.com/)
