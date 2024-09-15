@@ -11,7 +11,6 @@ import FilterItem from '../common/filters/FilterItem.vue'
 const todoStore = useTodoStore()
 const newTodoTitle = ref('')
 const editingId = ref<number | null>(null)
-const editedTitle = ref('')
 const searchTerm = ref('')
 const statusFilter = ref<'all' | 'not_started' | 'in_progress' | 'completed'>('all')
 const openStatusDropdown = ref<number | null>(null)
@@ -55,13 +54,12 @@ const updateTodoStatus = (id: number, status: 'not_started' | 'in_progress' | 'c
 
 const startEditing = (id: number, title: string) => {
     editingId.value = id
-    editedTitle.value = title
 }
 
-const saveEdit = (id: number) => {
-    if (editedTitle.value.trim()) {
+const saveEdit = (id: number, newTitle: string) => {
+    if (newTitle.trim()) {
         todoStore.updateTodo(id, {
-            title: editedTitle.value.trim()
+            title: newTitle.trim()
         })
         editingId.value = null
     }
@@ -69,7 +67,6 @@ const saveEdit = (id: number) => {
 
 const cancelEdit = () => {
     editingId.value = null
-    editedTitle.value = ''
 }
 
 const deleteTodo = (id: number) => {
@@ -97,7 +94,6 @@ const statusOptions = [
 <template>
     <div class="max-w-xl px-2 sm:px-4 mx-auto">
         <h1 id="todo-list-title" class="text-2xl md:text-3xl lg:text-4xl font-bold mb-24 relative inline-block">
-
             <span
                 class="block text-xl md:text-2xl lg:text-4xl text-secondary-foreground font-extrabold mt-2 relative z-10 animate-fadeIn delay-200">My
                 Todos</span>

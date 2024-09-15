@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { Button } from '@/components/ui/button'
 import { Pencil, Trash2, ChevronDown } from 'lucide-vue-next'
 import type { Todo } from '@/stores/todoStore'
 
-defineProps<{
+const props = defineProps<{
     todo: Todo
     editingId: number | null
     openStatusDropdown: number | null
@@ -14,13 +14,19 @@ const emit = defineEmits<{
     (e: 'toggleTodo', id: number, completed: boolean): void
     (e: 'updateTodoStatus', id: number, status: 'not_started' | 'in_progress' | 'completed'): void
     (e: 'startEditing', id: number, title: string): void
-    (e: 'saveEdit', id: number): void
+    (e: 'saveEdit', id: number, newTitle: string): void
     (e: 'cancelEdit'): void
     (e: 'deleteTodo', id: number): void
     (e: 'toggleStatusDropdown', id: number): void
 }>()
 
-const editedTitle = ref('')
+const editedTitle = ref(props.todo.title)
+
+watch(() => props.editingId, (newEditingId) => {
+    if (newEditingId === props.todo.id) {
+        editedTitle.value = props.todo.title
+    }
+})
 
 const getStatus = (todo: Todo): 'not_started' | 'in_progress' | 'completed' => {
     if (todo.completed) return 'completed'
@@ -51,16 +57,22 @@ const getStatusText = (todo: Todo): string => {
             return 'Not Started'
     }
 }
+
+const handleSaveEdit = () => {
+    if (editedTitle.value.trim()) {
+        emit('saveEdit', props.todo.id, editedTitle.value.trim())
+    }
+}
 </script>
 
 <template>
     <li class="p-3 border rounded bg-white shadow-sm">
         <div v-if="editingId === todo.id" class="space-y-2">
             <label :for="'edit-title-' + todo.id" class="block text-sm font-medium">Edit task title</label>
-            <input :id="'edit-title-' + todo.id" v-model="editedTitle" @keyup.enter="emit('saveEdit', todo.id)"
+            <input :id="'edit-title-' + todo.id" v-model="editedTitle" @keyup.enter="handleSaveEdit"
                 @keyup.esc="emit('cancelEdit')" class="w-full p-2 border rounded text-sm" />
             <div class="flex justify-end space-x-2">
-                <Button @click="emit('saveEdit', todo.id)" size="sm">Save</Button>
+                <Button @click="handleSaveEdit" size="sm">Save</Button>
                 <Button @click="emit('cancelEdit')" variant="outline" size="sm">Cancel</Button>
             </div>
         </div>
