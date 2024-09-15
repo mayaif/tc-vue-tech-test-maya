@@ -39,6 +39,18 @@ const getStatusColor = (todo: Todo) => {
             return 'bg-gray-500'
     }
 }
+
+const getStatusText = (todo: Todo): string => {
+    const status = getStatus(todo)
+    switch (status) {
+        case 'completed':
+            return 'Completed'
+        case 'in_progress':
+            return 'In Progress'
+        case 'not_started':
+            return 'Not Started'
+    }
+}
 </script>
 
 <template>
@@ -64,7 +76,9 @@ const getStatusColor = (todo: Todo) => {
             <div class="flex items-center space-x-2 justify-center sm:justify-end">
                 <div class="relative">
                     <button @click="emit('toggleStatusDropdown', todo.id)"
-                        class="flex items-center space-x-1 bg-gray-100 rounded p-1">
+                        class="flex items-center space-x-1 bg-gray-100 rounded p-1"
+                        :aria-label="`Change status: currently ${getStatusText(todo)}`"
+                        :aria-expanded="openStatusDropdown === todo.id">
                         <span :class="['w-3 h-3 rounded-full', getStatusColor(todo)]"></span>
                         <ChevronDown class="w-4 h-4" />
                     </button>
