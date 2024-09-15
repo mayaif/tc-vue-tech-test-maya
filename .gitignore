@@ -29,3 +29,8 @@ coverage
 
 *.tsbuildinfo
 *.lockb
+
+# Environment files
+.env
+.env.*
+
